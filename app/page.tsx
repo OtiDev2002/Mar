@@ -353,20 +353,17 @@ export default function Home() {
               </div>
             </ScratchCard>
 
-            <AnimatePresence>
-              {scratchRevealed && (
-                <motion.button
-                  onClick={next}
-                  className="mt-2 px-8 py-3 bg-blush-500 text-white rounded-full font-semibold shadow-lg active:scale-95 transition-transform"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Siguiente ♥
-                </motion.button>
-              )}
-            </AnimatePresence>
+            {scratchRevealed && (
+              <motion.button
+                onClick={next}
+                className="mt-2 px-8 py-3 bg-blush-500 text-white rounded-full font-semibold shadow-lg active:scale-95 transition-transform"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Siguiente ♥
+              </motion.button>
+            )}
           </motion.div>
         )}
 

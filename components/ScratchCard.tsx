@@ -26,6 +26,8 @@ export default function ScratchCard({
   const lastPoint = useRef<{ x: number; y: number } | null>(null);
   const scratchCount = useRef(0);
   const lastTapTime = useRef(0);
+  const autoRevealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasInteracted = useRef(false);
 
   const drawCover = useCallback(() => {
     const canvas = canvasRef.current;
@@ -62,6 +64,13 @@ export default function ScratchCard({
   useEffect(() => {
     drawCover();
   }, [drawCover]);
+
+  // Auto-reveal safety: 12s after first interaction
+  useEffect(() => {
+    return () => {
+      if (autoRevealTimer.current) clearTimeout(autoRevealTimer.current);
+    };
+  }, []);
 
   const getPos = (e: React.TouchEvent | React.MouseEvent) => {
     const canvas = canvasRef.current;
@@ -108,8 +117,8 @@ export default function ScratchCard({
     lastPoint.current = pos;
     scratchCount.current++;
 
-    // Check reveal every 20 strokes
-    if (scratchCount.current % 20 === 0) {
+    // Check reveal every 10 strokes
+    if (scratchCount.current % 10 === 0) {
       checkReveal(ctx);
     }
   };
@@ -136,6 +145,27 @@ export default function ScratchCard({
 
   const handleStart = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
+
+    // Double-tap to reveal
+    const now = Date.now();
+    if (now - lastTapTime.current < 350) {
+      setIsRevealed(true);
+      onReveal?.();
+      return;
+    }
+    lastTapTime.current = now;
+
+    // Start auto-reveal timer on first interaction
+    if (!hasInteracted.current) {
+      hasInteracted.current = true;
+      autoRevealTimer.current = setTimeout(() => {
+        if (!isRevealed) {
+          setIsRevealed(true);
+          onReveal?.();
+        }
+      }, 12000);
+    }
+
     setScratching(true);
     const pos = getPos(e);
     if (pos) scratch(pos);
@@ -151,6 +181,13 @@ export default function ScratchCard({
   const handleEnd = () => {
     setScratching(false);
     lastPoint.current = null;
+
+    // Always check threshold when user lifts finger
+    const canvas = canvasRef.current;
+    if (canvas && !isRevealed) {
+      const ctx = canvas.getContext("2d");
+      if (ctx) checkReveal(ctx);
+    }
   };
 
   return (

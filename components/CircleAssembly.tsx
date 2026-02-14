@@ -28,6 +28,15 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [showRevealButton, onComplete]);
+
+  // Fallback: show button after expected animation time + buffer
+  useEffect(() => {
+    const totalAnimTime = (1 + icons.length * 0.3 + 1) * 1000;
+    const timer = setTimeout(() => {
+      setShowRevealButton(true);
+    }, totalAnimTime + 2000);
+    return () => clearTimeout(timer);
+  }, [icons.length]);
   const radius = 145;
   const centerX = 200;
   const centerY = 200;
