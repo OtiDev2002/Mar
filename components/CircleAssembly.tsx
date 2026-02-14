@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
 interface IconData {
@@ -15,6 +16,7 @@ interface CircleAssemblyProps {
 }
 
 export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProps) {
+  const [showRevealButton, setShowRevealButton] = useState(false);
   const radius = 120;
   const centerX = 150;
   const centerY = 150;
@@ -38,31 +40,48 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
       <div className="relative" style={{ width: 300, height: 300 }}>
         {/* Circle outline */}
         <motion.div
-          className="absolute rounded-full border-2 border-blush-300"
+          className="absolute rounded-full border-2"
           style={{
             width: radius * 2 + 40,
             height: radius * 2 + 40,
             left: centerX - radius - 20,
             top: centerY - radius - 20,
+            borderColor: '#FFC9D6',
           }}
           initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+          animate={
+            showRevealButton
+              ? {
+                  opacity: 1,
+                  scale: [1, 1.05, 1],
+                  boxShadow: [
+                    '0 0 0px rgba(255,107,138,0.4)',
+                    '0 0 25px rgba(255,107,138,0.9)',
+                    '0 0 0px rgba(255,107,138,0.4)',
+                  ],
+                }
+              : { opacity: 1, scale: 1 }
+          }
+          transition={{
+            scale: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' },
+            boxShadow: { duration: 1.5, repeat: Infinity, ease: 'easeInOut' },
+            opacity: { delay: 0.5, duration: 0.8 },
+          }}
         />
 
         {/* Icons animating to circle positions */}
         {icons.map((icon, i) => {
           const angle = (i / icons.length) * Math.PI * 2 - Math.PI / 2;
-          const x = centerX + radius * Math.cos(angle) - 24;
-          const y = centerY + radius * Math.sin(angle) - 24;
+          const x = centerX + radius * Math.cos(angle) - 32;
+          const y = centerY + radius * Math.sin(angle) - 32;
 
           return (
             <motion.div
               key={icon.id}
-              className="absolute w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden p-1"
+              className="absolute w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden p-1"
               initial={{
-                x: centerX - 24,
-                y: centerY - 24,
+                x: centerX - 32,
+                y: centerY - 32,
                 scale: 0,
                 opacity: 0,
               }}
@@ -81,17 +100,15 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
               }}
               onAnimationComplete={
                 i === icons.length - 1
-                  ? () => {
-                      setTimeout(onComplete, 1500);
-                    }
+                  ? () => setShowRevealButton(true)
                   : undefined
               }
             >
               <Image
                 src={icon.src}
                 alt={icon.name}
-                width={40}
-                height={40}
+                width={56}
+                height={56}
                 className="object-contain"
               />
             </motion.div>
@@ -121,6 +138,20 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
       >
         ¿Reconocés la forma?
       </motion.p>
+
+      <AnimatePresence>
+        {showRevealButton && (
+          <motion.button
+            onClick={onComplete}
+            className="px-8 py-3 bg-blush-500 text-white rounded-full font-semibold shadow-lg active:scale-95 transition-transform"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Revelar ♥
+          </motion.button>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

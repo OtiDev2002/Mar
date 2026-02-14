@@ -19,58 +19,70 @@ const ICONS = [
     name: "Luna y estrellas",
     src: "/icons/luna.png",
     message:
-      "Sabés que me encanta mirar la luna. Y a vos te encantan las estrellas. Le puse estrellas a la luna porque juntos formamos ese cielo. La luna soy yo, las estrellas sos vos, y juntos somos la noche más linda.",
+      "Lo elegí porque sabes que amo la luna y la luna tiene estrellas porque juntos formamos el cielo. La luna soy yo, las estrellas sos vos, y juntos somos la noche más hermosa.",
   },
   {
     id: "myo",
     name: "m♥o",
     src: "/icons/myo.png",
     message:
-      "Nuestras iniciales unidas por un corazón. M de Mar, O de Oti. Porque juntos somos uno solo, y nuestros nombres quedan grabados para siempre.",
+      "Nuestras iniciales unidas por un corazón. M de Mar, O de Oti.",
   },
   {
     id: "flores",
     name: "Flores",
     src: "/icons/flores.png",
     message:
-      "Porque sé que amás las flores, y me encanta dártelas. Sé que siempre te ponés contenta, y fuiste la primera chica a la que le di una flor.",
+      "Porque sé que amás las flores, y a me encanta dártelas. Sé que siempre te ponés super feliz y a mi me llena el alma verte así.",
   },
   {
     id: "ola",
-    name: "Ola",
+    name: "Mar",
     src: "/icons/ola.png",
     message:
-      "Representa tu hermoso apodo, Mar. Y también nuestras primeras vacaciones juntos en Mar de las Pampas, donde nos conocimos mucho más.",
+      "Representa tu apodo. Y también significa nuestras primeras hermosas vacaciones juntos en Mar de las Pampas, donde nos conocimos mucho más.",
   },
   {
     id: "sol",
     name: "Sol",
     src: "/icons/sol.png",
     message:
-      "Esta sos vos. Sé que amás el sol, que amás la luz, y eso es exactamente lo que irradiás en mi vida. Sos mi sol.",
+      "Este objeto te caracteriza a vos, yo sé que amás el sol, y que amás la luz, y eso es exactamente lo que irradiás en mi vida. Sos mi sol.",
   },
   {
     id: "montanas",
     name: "Montañas",
     src: "/icons/montanas.png",
     message:
-      "Esto representa nuestras segundas vacaciones juntos, en Córdoba. Vamos a ver qué pasa, vamos a estar mucho tiempo juntos y disfrutar cada momento.",
+      "Esto representa nuestras segundas vacaciones juntos, en Córdoba. Donde vamos a llenarnos de recuerdos lindos y vamos a estar mucho tiempo juntos y disfrutar cada momento.",
   },
   {
     id: "burger",
     name: "Hamburguesa y Papas",
     src: "/icons/burger-papas.png",
     message:
-      "Amo comer hamburguesas y papas con vos, es siempre uno de nuestros planes favoritos. Yo soy la hamburguesita y vos las papitas. Siempre juntos.",
+      "Amo comer hamburguesas y papas con vos, es siempre uno de nuestros planes favoritos. Yo soy la hamburguesita y vos las papitas. Por mil planes más comiendo hamburguesas ricas y papitas.",
   },
   {
     id: "corazones",
     name: "Corazones",
     src: "/icons/corazones.png",
     message:
-      "Porque estamos destinados a estar juntos. Dos corazones que se encontraron y ya no se van a separar más.",
+      "Porque estamos destinados a estar juntos. Dos corazones que se encontraron sin buscarlo, que no quieren separarse jamás.",
   },
 ];
+
+// ─── Icon scales ───────────────────────────────────────────
+const ICON_SCALES: Record<string, number> = {
+  luna: 0.85,
+  myo: 0.9,
+  flores: 0.6,      // Más grande, reducir significativamente
+  ola: 0.85,
+  sol: 0.7,         // También grande
+  montanas: 0.85,
+  burger: 0.8,
+  corazones: 0.85,
+};
 
 // ─── Screen sequence ───────────────────────────────────────
 type Screen =
@@ -95,13 +107,13 @@ const SCREENS: Screen[] = [
   {
     type: "photo",
     src: "/photos/playa-beso.png",
-    message: "Mar de las Pampas. Nuestro lugar, nuestro atardecer ♥",
+    message: "Recuerdito de las primeras vacaciones ♥",
   },
   { type: "scratch", iconIndex: 4 }, // Sol
   {
     type: "photo",
     src: "/photos/cuadros.png",
-    message: "Pintando juntos bajo la luna. La creatividad también nos une ♥",
+    message: "Recuerdito pintando bajo la luna. Un dibujo sobre el sol ♥",
   },
   { type: "scratch", iconIndex: 5 }, // Montañas
   { type: "scratch", iconIndex: 6 }, // Burger + Papas
@@ -302,7 +314,12 @@ export default function Home() {
               onReveal={() => setScratchRevealed(true)}
             >
               <div className="flex flex-col items-center justify-center gap-4 p-6 bg-white rounded-3xl w-full h-full">
-                <div className="relative w-56 h-56">
+                <div 
+                  className="relative w-56 h-56 flex items-center justify-center"
+                  style={{
+                    transform: `scale(${ICON_SCALES[ICONS[screen.iconIndex].id] || 1})`
+                  }}
+                >
                   <Image
                     src={ICONS[screen.iconIndex].src}
                     alt={ICONS[screen.iconIndex].name}
