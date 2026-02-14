@@ -17,9 +17,10 @@ interface CircleAssemblyProps {
 
 export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProps) {
   const [showRevealButton, setShowRevealButton] = useState(false);
-  const radius = 120;
+  const radius = 110;
   const centerX = 150;
   const centerY = 150;
+  const iconSize = 56;
 
   return (
     <motion.div
@@ -72,16 +73,22 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
         {/* Icons animating to circle positions */}
         {icons.map((icon, i) => {
           const angle = (i / icons.length) * Math.PI * 2 - Math.PI / 2;
-          const x = centerX + radius * Math.cos(angle) - 32;
-          const y = centerY + radius * Math.sin(angle) - 32;
+          const halfSize = iconSize / 2;
+          const x = centerX + radius * Math.cos(angle) - halfSize;
+          const y = centerY + radius * Math.sin(angle) - halfSize;
 
           return (
             <motion.div
               key={icon.id}
-              className="absolute w-16 h-16 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden p-1"
+              className="absolute rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden"
+              style={{
+                width: iconSize,
+                height: iconSize,
+                padding: '6px',
+              }}
               initial={{
-                x: centerX - 32,
-                y: centerY - 32,
+                x: centerX - halfSize,
+                y: centerY - halfSize,
                 scale: 0,
                 opacity: 0,
               }}
@@ -107,8 +114,8 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
               <Image
                 src={icon.src}
                 alt={icon.name}
-                width={56}
-                height={56}
+                width={iconSize - 12}
+                height={iconSize - 12}
                 className="object-contain"
               />
             </motion.div>

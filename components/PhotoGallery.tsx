@@ -99,6 +99,7 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
               fill
               className="object-cover"
               sizes={i % 3 === 0 ? "100vw" : "50vw"}
+              priority={i < 2}
             />
           </motion.div>
         ))}

@@ -19,14 +19,14 @@ const ICONS = [
     name: "Luna y estrellas",
     src: "/icons/luna.png",
     message:
-      "Lo elegí porque sabes que amo la luna y la luna tiene estrellas porque juntos formamos el cielo. La luna soy yo, las estrellas sos vos, y juntos somos la noche más hermosa.",
+      "Lo elegí porque sabes que amo la luna y esta tiene estrellas porque juntos formamos el cielo. La luna soy yo, las estrellas sos vos, y juntos somos la noche más hermosa.",
   },
   {
     id: "myo",
     name: "m♥o",
     src: "/icons/myo.png",
     message:
-      "Nuestras iniciales unidas por un corazón. M de Mar, O de Oti.",
+      "Nuestras iniciales unidas por un corazón.",
   },
   {
     id: "flores",
@@ -74,14 +74,14 @@ const ICONS = [
 
 // ─── Icon scales ───────────────────────────────────────────
 const ICON_SCALES: Record<string, number> = {
-  luna: 0.85,
-  myo: 0.9,
-  flores: 0.6,      // Más grande, reducir significativamente
-  ola: 0.85,
-  sol: 0.7,         // También grande
-  montanas: 0.85,
-  burger: 0.8,
-  corazones: 0.85,
+  luna: 1.0,
+  myo: 1.05,
+  flores: 0.85,
+  ola: 1.1,
+  sol: 1.15,
+  montanas: 1.2,
+  burger: 0.95,
+  corazones: 1.0,
 };
 
 // ─── Screen sequence ───────────────────────────────────────
@@ -101,7 +101,7 @@ const SCREENS: Screen[] = [
   {
     type: "photo",
     src: "/photos/mar-flores.png",
-    message: "La primera vez que te regalé flores... tu sonrisa lo dijo todo ♥",
+    message: "La primera vez que te regalé flores♥",
   },
   { type: "scratch", iconIndex: 3 }, // Ola/Mar
   {
@@ -125,20 +125,20 @@ const SCREENS: Screen[] = [
 
 // ─── Gallery photos ────────────────────────────────────────
 const GALLERY_PHOTOS = [
-  "/gallery/IMG_4643.JPG",
-  "/gallery/IMG_4950.JPG",
-  "/gallery/IMG_4962.JPG",
-  "/gallery/IMG_4963.JPG",
-  "/gallery/IMG_4965.JPG",
-  "/gallery/IMG_5025.JPG",
-  "/gallery/IMG_5034.JPG",
-  "/gallery/IMG_5371.JPG",
-  "/gallery/IMG_5372.JPG",
-  "/gallery/IMG_5377.JPG",
-  "/gallery/IMG_5378.JPG",
-  "/gallery/IMG_5379.JPG",
-  "/gallery/IMG_5548.JPG",
-  "/gallery/IMG_5552.JPG",
+  "/gallery/img_4643.jpg",
+  "/gallery/img_4950.jpg",
+  "/gallery/img_4962.jpg",
+  "/gallery/img_4963.jpg",
+  "/gallery/img_4965.jpg",
+  "/gallery/img_5025.jpg",
+  "/gallery/img_5034.jpg",
+  "/gallery/img_5371.jpg",
+  "/gallery/img_5372.jpg",
+  "/gallery/img_5377.jpg",
+  "/gallery/img_5378.jpg",
+  "/gallery/img_5379.jpg",
+  "/gallery/img_5548.jpg",
+  "/gallery/img_5552.jpg",
   "/gallery/WhatsApp1.jpeg",
   "/gallery/WhatsApp2.jpeg",
   "/gallery/WhatsApp3.jpeg",
@@ -309,14 +309,16 @@ export default function Home() {
             <ProgressDots total={8} current={screen.iconIndex} />
 
             <ScratchCard
-              width={300}
-              height={380}
+              width={340}
+              height={520}
               onReveal={() => setScratchRevealed(true)}
             >
-              <div className="flex flex-col items-center justify-center gap-4 p-6 bg-white rounded-3xl w-full h-full">
+              <div className="flex flex-col items-center justify-between gap-3 p-6 bg-white rounded-3xl w-full h-full">
                 <div 
-                  className="relative w-56 h-56 flex items-center justify-center"
+                  className="relative flex items-center justify-center flex-shrink-0"
                   style={{
+                    width: '280px',
+                    height: '280px',
                     transform: `scale(${ICON_SCALES[ICONS[screen.iconIndex].id] || 1})`
                   }}
                 >
@@ -325,15 +327,17 @@ export default function Home() {
                     alt={ICONS[screen.iconIndex].name}
                     fill
                     className="object-contain"
-                    sizes="224px"
+                    sizes="280px"
                   />
                 </div>
-                <h3 className="text-xl font-script text-blush-700">
-                  {ICONS[screen.iconIndex].name}
-                </h3>
-                <p className="text-sm text-blush-500 text-center leading-relaxed px-2">
-                  {ICONS[screen.iconIndex].message}
-                </p>
+                <div className="flex flex-col gap-2 flex-shrink-0">
+                  <h3 className="text-xl font-script text-blush-700 text-center">
+                    {ICONS[screen.iconIndex].name}
+                  </h3>
+                  <p className="text-sm text-blush-500 text-center leading-relaxed px-2">
+                    {ICONS[screen.iconIndex].message}
+                  </p>
+                </div>
               </div>
             </ScratchCard>
 
