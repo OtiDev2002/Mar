@@ -405,7 +405,7 @@ export default function Home() {
 
         {/* ── Photo Gallery ───────────────────────── */}
         {screen.type === "gallery" && (
-          <PhotoGallery key="gallery" photos={GALLERY_PHOTOS} />
+          <PhotoGallery key="gallery" />
         )}
       </AnimatePresence>
     </main>

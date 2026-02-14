@@ -4,11 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ReactConfetti from "react-confetti";
 
-interface PhotoGalleryProps {
-  photos: string[];
-}
-
-export default function PhotoGallery({ photos }: PhotoGalleryProps) {
+export default function PhotoGallery() {
   const [showConfetti, setShowConfetti] = useState(true);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
@@ -18,34 +14,9 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.5,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0, scale: 0.3, y: 60 },
-    show: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-      },
-    },
-  };
-
   return (
     <motion.div
-      className="flex flex-col items-center min-h-dvh px-4 py-8 gap-6 relative"
+      className="flex flex-col items-center justify-center min-h-dvh px-8 gap-8 relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -60,56 +31,17 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
         />
       )}
 
-      <motion.h2
-        className="text-2xl font-script text-blush-700 text-center z-10 pt-4"
-        initial={{ opacity: 0, y: -20 }}
+      <motion.div
+        className="flex flex-col items-center gap-6 z-10"
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        Nuestras aventuras
-      </motion.h2>
-
-      <motion.p
-        className="text-base text-blush-500 text-center z-10 max-w-xs"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-      >
-        Por muchos más San Valentín y años juntos
-      </motion.p>
-
-      <motion.div
-        className="grid grid-cols-2 gap-3 w-full max-w-sm z-10"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        {photos.map((photo, i) => (
-          <motion.div
-            key={photo}
-            className={`relative rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blush-100 ${
-              i % 3 === 0 ? "col-span-2 h-[240px]" : "h-[180px]"
-            }`}
-            variants={item}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={photo}
-              alt="Recuerdo especial"
-              className="w-full h-full object-cover"
-              loading={i < 4 ? "eager" : "lazy"}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
-
-      <motion.div
-        className="flex flex-col items-center gap-4 py-8 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: photos.length * 0.15 + 1 }}
+        transition={{ delay: 0.3, duration: 0.8 }}
       >
         <div className="w-20 h-0.5 bg-blush-300 rounded-full" />
+
+        <p className="text-base text-blush-500 text-center max-w-xs">
+          Por muchos más San Valentín y años juntos
+        </p>
 
         <p className="text-3xl font-script text-blush-700 text-center">
           Te amo, Mar ♥
@@ -123,6 +55,8 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
         <p className="text-lg font-script text-blush-400 mt-4">
           — Tu Oti
         </p>
+
+        <div className="w-20 h-0.5 bg-blush-300 rounded-full" />
       </motion.div>
     </motion.div>
   );
