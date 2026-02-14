@@ -137,10 +137,10 @@ const GALLERY_PHOTOS = [
   "/gallery/img_5378.jpg",
   "/gallery/img_5379.jpg",
   "/gallery/img_5548.jpg",
-  "/gallery/WhatsApp1.jpeg",
-  "/gallery/WhatsApp2.jpeg",
-  "/gallery/WhatsApp3.jpeg",
-  "/gallery/WhatsApp4.jpeg",
+  "/gallery/whatsapp1.jpg",
+  "/gallery/whatsapp2.jpg",
+  "/gallery/whatsapp3.jpg",
+  "/gallery/whatsapp4.jpg",
 ];
 
 // ─── Main page ─────────────────────────────────────────────

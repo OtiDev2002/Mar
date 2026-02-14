@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import ReactConfetti from "react-confetti";
 
 interface PhotoGalleryProps {
@@ -87,19 +86,18 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
       >
         {photos.map((photo, i) => (
           <motion.div
-            key={i}
+            key={photo}
             className={`relative rounded-2xl overflow-hidden shadow-lg border-2 border-white bg-blush-100 ${
               i % 3 === 0 ? "col-span-2 h-[240px]" : "h-[180px]"
             }`}
             variants={item}
           >
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={photo}
               alt="Recuerdo especial"
-              fill
-              className="object-cover"
-              sizes={i % 3 === 0 ? "(max-width: 768px) 100vw, 600px" : "(max-width: 768px) 50vw, 300px"}
-              quality={85}
+              className="w-full h-full object-cover"
+              loading={i < 4 ? "eager" : "lazy"}
             />
           </motion.div>
         ))}
