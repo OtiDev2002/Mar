@@ -21,6 +21,17 @@ export default function MateReveal({ mateImage, selfieImage, onNext }: MateRevea
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        onNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onNext]);
+
   return (
     <motion.div
       className="flex flex-col items-center justify-center min-h-dvh px-6 py-8 gap-6 relative"

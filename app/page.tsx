@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import HeartsBackground from "@/components/HeartsBackground";
@@ -131,14 +131,12 @@ const GALLERY_PHOTOS = [
   "/gallery/img_4963.jpg",
   "/gallery/img_4965.jpg",
   "/gallery/img_5025.jpg",
-  "/gallery/img_5034.jpg",
   "/gallery/img_5371.jpg",
   "/gallery/img_5372.jpg",
   "/gallery/img_5377.jpg",
   "/gallery/img_5378.jpg",
   "/gallery/img_5379.jpg",
   "/gallery/img_5548.jpg",
-  "/gallery/img_5552.jpg",
   "/gallery/WhatsApp1.jpeg",
   "/gallery/WhatsApp2.jpeg",
   "/gallery/WhatsApp3.jpeg",
@@ -165,6 +163,20 @@ export default function Home() {
           (s) => s.type === "scratch" && s.iconIndex === screen.iconIndex
         )
       : -1;
+
+  // Handle Enter key to advance
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        if (scratchRevealed || screen.type === "landing") {
+          next();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [scratchRevealed, screen.type, next]);
 
   return (
     <main className="relative min-h-dvh animated-gradient-bg">

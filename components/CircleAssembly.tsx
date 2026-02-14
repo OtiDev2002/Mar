@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -17,10 +17,21 @@ interface CircleAssemblyProps {
 
 export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProps) {
   const [showRevealButton, setShowRevealButton] = useState(false);
-  const radius = 110;
-  const centerX = 150;
-  const centerY = 150;
-  const iconSize = 56;
+  
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && showRevealButton) {
+        onComplete();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showRevealButton, onComplete]);
+  const radius = 145;
+  const centerX = 200;
+  const centerY = 200;
+  const iconSize = 95;
 
   return (
     <motion.div
@@ -38,16 +49,18 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
         Todos estos símbolos forman algo especial...
       </motion.p>
 
-      <div className="relative" style={{ width: 300, height: 300 }}>
+      <div className="relative" style={{ width: 400, height: 400 }}>
         {/* Circle outline */}
         <motion.div
-          className="absolute rounded-full border-2"
+          className="absolute rounded-full"
           style={{
-            width: radius * 2 + 40,
-            height: radius * 2 + 40,
-            left: centerX - radius - 20,
-            top: centerY - radius - 20,
+            width: radius * 2 + 90,
+            height: radius * 2 + 90,
+            left: centerX - radius - 45,
+            top: centerY - radius - 45,
             borderColor: '#FFC9D6',
+            borderWidth: '6px',
+            borderStyle: 'solid',
           }}
           initial={{ opacity: 0, scale: 0 }}
           animate={
@@ -84,7 +97,7 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
               style={{
                 width: iconSize,
                 height: iconSize,
-                padding: '6px',
+                padding: '2px',
               }}
               initial={{
                 x: centerX - halfSize,
@@ -114,8 +127,8 @@ export default function CircleAssembly({ icons, onComplete }: CircleAssemblyProp
               <Image
                 src={icon.src}
                 alt={icon.name}
-                width={iconSize - 12}
-                height={iconSize - 12}
+                width={iconSize - 4}
+                height={iconSize - 4}
                 className="object-contain"
               />
             </motion.div>

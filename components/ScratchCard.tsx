@@ -25,6 +25,7 @@ export default function ScratchCard({
   const [scratching, setScratching] = useState(false);
   const lastPoint = useRef<{ x: number; y: number } | null>(null);
   const scratchCount = useRef(0);
+  const lastTapTime = useRef(0);
 
   const drawCover = useCallback(() => {
     const canvas = canvasRef.current;
@@ -135,9 +136,24 @@ export default function ScratchCard({
 
   const handleStart = (e: React.TouchEvent | React.MouseEvent) => {
     e.preventDefault();
+    
+    // Detect double tap/click to reveal instantly
+    const now = Date.now();
+    if (now - lastTapTime.current < 300) {
+      // Double tap detected, reveal instantly
+      skipScratch();
+      return;
+    }
+    lastTapTime.current = now;
+    
     setScratching(true);
     const pos = getPos(e);
     if (pos) scratch(pos);
+  };
+
+  const skipScratch = () => {
+    setIsRevealed(true);
+    onReveal?.();
   };
 
   const handleMove = (e: React.TouchEvent | React.MouseEvent) => {
@@ -165,22 +181,35 @@ export default function ScratchCard({
       {/* Scratch overlay */}
       <AnimatePresence>
         {!isRevealed && (
-          <motion.canvas
-            ref={canvasRef}
-            width={width}
-            height={height}
-            className="absolute inset-0 scratch-canvas rounded-3xl"
-            style={{ width, height }}
-            onTouchStart={handleStart}
-            onTouchMove={handleMove}
-            onTouchEnd={handleEnd}
-            onMouseDown={handleStart}
-            onMouseMove={handleMove}
-            onMouseUp={handleEnd}
-            onMouseLeave={handleEnd}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-          />
+          <>
+            <motion.canvas
+              ref={canvasRef}
+              width={width}
+              height={height}
+              className="absolute inset-0 scratch-canvas rounded-3xl"
+              style={{ width, height }}
+              onTouchStart={handleStart}
+              onTouchMove={handleMove}
+              onTouchEnd={handleEnd}
+              onMouseDown={handleStart}
+              onMouseMove={handleMove}
+              onMouseUp={handleEnd}
+              onMouseLeave={handleEnd}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            />
+            {/* Skip button */}
+            <motion.button
+              onClick={skipScratch}
+              className="absolute top-3 right-3 z-10 px-3 py-1.5 bg-white/90 text-blush-600 text-xs font-semibold rounded-full shadow-md active:scale-95 transition-transform"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              Saltar
+            </motion.button>
+          </>
         )}
       </AnimatePresence>
     </div>
